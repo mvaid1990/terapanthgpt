@@ -1,0 +1,95 @@
+{
+  "name": "Approve and Index Source",
+  "nodes": [
+    {
+      "parameters": {
+        "path": "approve-source/:source_id",
+        "httpMethod": "POST",
+        "responseMode": "lastNode"
+      },
+      "id": "Webhook",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        320,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=http://ingestion_api:8000/admin/sources/{{$json.params.source_id}}/approve",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer devkey"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "Approve",
+      "name": "Approve",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        580,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=http://ingestion_api:8000/admin/sources/{{$json.params.source_id}}/index",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer devkey"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "Index",
+      "name": "Index",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        820,
+        300
+      ]
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Approve",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Approve": {
+      "main": [
+        [
+          {
+            "node": "Index",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  }
+}
