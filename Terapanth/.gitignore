@@ -1,0 +1,12 @@
+# .gitignore
+.env
+uploads/
+__pycache__/
+*.pyc
+.pytest_cache/
+.mypy_cache/
+backend/.venv/
+node_modules/
+frontend/.next/
+frontend/out/
+.superpowers/
